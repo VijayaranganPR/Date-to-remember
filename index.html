@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Date Difference from April 22, 2019</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f0f0f0;
+            text-align: center;
+        }
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            margin-bottom: 20px;
+        }
+        .time {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Date Time Tracker</h1>
+        <div class="time" id="currentTime"></div>
+        <h2>Time Since April 22, 2019</h2>
+        <div class="time" id="difference"></div>
+    </div>
+
+    <script>
+        const startDate = new Date('2019-04-22T00:00:00');
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').innerText = 
+                "Current Time: " + now.toLocaleString();
+
+            let diff = Math.floor((now - startDate) / 1000);
+
+            const years = Math.floor(diff / (365.25 * 24 * 3600));
+            diff %= Math.floor(365.25 * 24 * 3600);
+
+            const months = Math.floor(diff / (30 * 24 * 3600));
+            diff %= 30 * 24 * 3600;
+
+            const days = Math.floor(diff / (24 * 3600));
+            diff %= 24 * 3600;
+
+            const hours = Math.floor(diff / 3600);
+            diff %= 3600;
+
+            const minutes = Math.floor(diff / 60);
+            const seconds = diff % 60;
+
+            document.getElementById('difference').innerText = 
+                `${years} years, ${months} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
