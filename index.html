@@ -1,71 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Date Difference from April 22, 2018</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f0f0f0;
-            text-align: center;
-        }
-        .container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            margin-bottom: 20px;
-        }
-        .time {
-            font-size: 18px;
-            margin-top: 10px;
-            color: #333;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Special Dates with Subi</title>
+  <!-- 1. Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      --card-bg: #ffffffdd;
+      --card-shadow: rgba(0, 0, 0, 0.15);
+      --text-muted: #666;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--primary-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 10px 25px var(--card-shadow);
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #ff8a00, #e52e71);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      animation: fadeIn 1s ease both;
+    }
+    .time {
+      font-size: 1rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .events {
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: 12px;
+      margin-bottom: 30px;
+    }
+    .event {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      box-shadow: 0 4px 10px var(--card-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: left;
+    }
+    .event:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px var(--card-shadow);
+    }
+    .event strong {
+      display: block;
+      font-weight: 600;
+      color: #333;
+    }
+    .event span {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    #difference {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Date Time Tracker</h1>
-        <div class="time" id="currentTime"></div>
-        <h2>Time Since April 22, 2018</h2>
-        <div class="time" id="difference"></div>
+  <div class="container">
+    <h1>Our Beautiful Journey</h1>
+
+    <div class="time" id="currentTime"></div>
+
+    <div class="events">
+      <div class="event">
+        <strong>First Met Subi</strong>
+        <span>April 22, 2018</span>
+      </div>
+      <div class="event">
+        <strong>Proposal Accepted</strong>
+        <span>November 13, 2018</span>
+      </div>
+      <div class="event">
+        <strong>First Kiss</strong>
+        <span>December 14, 2018</span>
+      </div>
     </div>
 
-    <script>
-        const startDate = new Date('2018-04-22T00:00:00');
+    <h2>Time Since First Meeting</h2>
+    <div class="time" id="difference"></div>
+  </div>
 
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('currentTime').innerText = 
-                "Current Time: " + now.toLocaleString();
+  <script>
+    const startDate = new Date('2018-04-22T00:00:00');
 
-            let diff = Math.floor((now - startDate) / 1000);
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('currentTime').innerText =
+        "Current Time: " + now.toLocaleString();
 
-            const years = Math.floor(diff / (365.25 * 24 * 3600));
-            diff %= Math.floor(365.25 * 24 * 3600);
+      let years   = now.getFullYear()  - startDate.getFullYear();
+      let months  = now.getMonth()     - startDate.getMonth();
+      let days    = now.getDate()      - startDate.getDate();
+      let hours   = now.getHours()     - startDate.getHours();
+      let minutes = now.getMinutes()   - startDate.getMinutes();
+      let seconds = now.getSeconds()   - startDate.getSeconds();
 
-            const months = Math.floor(diff / (30 * 24 * 3600));
-            diff %= 30 * 24 * 3600;
+      if (seconds < 0) { seconds += 60;   minutes--; }
+      if (minutes < 0) { minutes += 60;   hours--;   }
+      if (hours   < 0) { hours   += 24;   days--;    }
+      if (days    < 0) {
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
+        months--;
+      }
+      if (months  < 0) { months += 12; years--; }
 
-            const days = Math.floor(diff / (24 * 3600));
-            diff %= 24 * 3600;
+      document.getElementById('difference').innerText =
+        `${years} years, ${months} months, ${days} days, ` +
+        `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+    }
 
-            const hours = Math.floor(diff / 3600);
-            diff %= 3600;
-
-            const minutes = Math.floor(diff / 60);
-            const seconds = diff % 60;
-
-            document.getElementById('difference').innerText = 
-                `${years} years, ${months} months, ${days} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-        }
-
-        setInterval(updateTime, 1000);
-        updateTime();
-    </script>
+    setInterval(updateTime, 1000);
+    updateTime();
+  </script>
 </body>
 </html>
